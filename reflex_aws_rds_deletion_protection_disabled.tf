@@ -1,5 +1,5 @@
 module "reflex_aws_rds_deletion_protection_disabled" {
-  source           = "git::https://github.com/cloudmitigator/reflex-engine.git//modules/cwe_lambda?ref=v0.5.7"
+  source           = "git::https://github.com/cloudmitigator/reflex-engine.git//modules/cwe_lambda?ref=v0.5.8"
   rule_name        = "RDSDeletionProtectionDisabled"
   rule_description = "Rule to detect if deletion protection is disabled for RDS Instance."
 
