@@ -12,6 +12,6 @@ jobs:
         uses: patrickjahns/dependabot-terraform-action@v1
         with:
           directory: |
-            'terraform/cwe/'
-            'terraform/sqs_lambda/'
+            terraform/cwe/
+            terraform/sqs_lambda/
           github_dependency_token: ${{ secrets.DEPENDENCY_GITHUB_TOKEN }}
