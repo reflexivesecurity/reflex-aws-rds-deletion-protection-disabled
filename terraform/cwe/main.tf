@@ -1,5 +1,5 @@
 module "cwe" {
-  source      = "git::https://github.com/cloudmitigator/reflex-engine.git//modules/cwe?ref=v2.0.0"
+  source      = "git::https://github.com/cloudmitigator/reflex-engine.git//modules/cwe?ref=v2.0.1"
   name        = "RdsDeletionProtectionDisabled"
   description = "Rule to detect if deletion protection is disabled for RDS Instance."
 
