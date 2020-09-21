@@ -15,8 +15,12 @@ class RDSDeletionProtectionDisabled(AWSRule):
 
     def extract_event_data(self, event):
         """ Extract required event data """
-        self.db_instance_id = event["detail"]["requestParameters"]["dBInstanceIdentifier"]
-        self.deletion_protection =  event["detail"]["requestParameters"]["deletionProtection"]
+        self.db_instance_id = event["detail"]["requestParameters"][
+            "dBInstanceIdentifier"
+        ]
+        self.deletion_protection = event["detail"]["requestParameters"][
+            "deletionProtection"
+        ]
 
     def resource_compliant(self):
         """
@@ -34,8 +38,9 @@ class RDSDeletionProtectionDisabled(AWSRule):
 def lambda_handler(event, _):
     """ Handles the incoming event """
     print(event)
-    if subscription_confirmation.is_subscription_confirmation(event):
-        subscription_confirmation.confirm_subscription(event)
+    event_payload = json.loads(event["Records"][0]["body"])
+    if subscription_confirmation.is_subscription_confirmation(event_payload):
+        subscription_confirmation.confirm_subscription(event_payload)
         return
-    rule = RDSDeletionProtectionDisabled(json.loads(event["Records"][0]["body"]))
+    rule = RDSDeletionProtectionDisabled(event_payload)
     rule.run_compliance_rule()
