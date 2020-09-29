@@ -4,7 +4,7 @@ import json
 import os
 
 import boto3
-from reflex_core import AWSRule
+from reflex_core import AWSRule, subscription_confirmation
 
 
 class RDSDeletionProtectionDisabled(AWSRule):
@@ -15,8 +15,12 @@ class RDSDeletionProtectionDisabled(AWSRule):
 
     def extract_event_data(self, event):
         """ Extract required event data """
-        self.db_instance_id = event["detail"]["requestParameters"]["dBInstanceIdentifier"]
-        self.deletion_protection =  event["detail"]["requestParameters"]["deletionProtection"]
+        self.db_instance_id = event["detail"]["requestParameters"][
+            "dBInstanceIdentifier"
+        ]
+        self.deletion_protection = event["detail"]["requestParameters"][
+            "deletionProtection"
+        ]
 
     def resource_compliant(self):
         """
@@ -33,5 +37,10 @@ class RDSDeletionProtectionDisabled(AWSRule):
 
 def lambda_handler(event, _):
     """ Handles the incoming event """
-    rule = RDSDeletionProtectionDisabled(json.loads(event["Records"][0]["body"]))
+    print(event)
+    event_payload = json.loads(event["Records"][0]["body"])
+    if subscription_confirmation.is_subscription_confirmation(event_payload):
+        subscription_confirmation.confirm_subscription(event_payload)
+        return
+    rule = RDSDeletionProtectionDisabled(event_payload)
     rule.run_compliance_rule()
